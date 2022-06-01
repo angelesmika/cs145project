@@ -10,7 +10,7 @@ HOST = '10.0.7.141'
 PORT = 6670
 ADDR = (HOST, PORT)
 
-UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 FILE = open('payload.txt')
 
 def checksum(packet):
