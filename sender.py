@@ -29,6 +29,9 @@ def main():
     # Bind the UDP socket to host and port
     UDP_SOCKET.bind((HOST_NAME, PORT))
 
+    # Set a timeout for the socket
+    UDP_SOCKET.settimeout(10)
+
     # Initiate a transaction and send ID
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), DST_ADDR)
 
