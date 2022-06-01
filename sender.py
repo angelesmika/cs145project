@@ -6,7 +6,7 @@ import socket
 import hashlib
 
 ID = '881967a8'
-HOST = '10.0.7.141'
+HOST = '10.0.1.52'
 PORT = 6670
 ADDR = (HOST, PORT)
 
