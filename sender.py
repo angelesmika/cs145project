@@ -20,9 +20,8 @@ def main():
     UDP_SOCKET.bind(('', PORT))
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), ADDR)
 
-    data, addr = UDP_SOCKET.recvfrom(1024)
-    message = data.decode()
-    print(message)
+    data = UDP_SOCKET.recv(1024).decode()
+    print(data)
 
 if __name__ == "__main__":
     main()
