@@ -35,18 +35,18 @@ def main():
     # Receive packets and print transaction ID
     data, addr = UDP_SOCKET.recvfrom(1024)
     transactionID = data.decode()
-    print(transactionID)
+    print(f"Transaction ID: {transactionID}")
 
     # Load and read the payload from file
     payload = FILE.read()
     payloadSize = len(payload)
 
     idx = 0
-    last = 0
     seqNum = 0
     msgLen = max(1, payloadSize)
 
     while idx < payloadSize:
+        last = 0 if idx + msgLen < payloadSize else 1
         while True:
             msg = payload[idx:payloadSize-1] if idx + msgLen == payloadSize else payload[idx:idx + msgLen]
             packet = f'ID{ID}SN{str(seqNum).zfill(7)}TXN{transactionID}Z{str(last)}{msg}'
