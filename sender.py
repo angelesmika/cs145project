@@ -5,12 +5,16 @@
 import socket
 import hashlib
 
+# Initialize variables
 ID = '881967a8'
-HOST = '10.0.1.52'
+HOST = '10.0.7.141'
 PORT = 6670
 ADDR = (HOST, PORT)
 
+# Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+# Open payload.txt
 FILE = open('payload.txt')
 
 def checksum(packet):
