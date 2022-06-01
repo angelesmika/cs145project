@@ -43,7 +43,7 @@ def main():
 
     idx = 0
     seqNum = 0
-    msgLen = max(1, payloadSize)
+    msgLen = max(1, payloadSize // 90)
 
     while idx < payloadSize:
         last = 0 if idx + msgLen < payloadSize else 1
