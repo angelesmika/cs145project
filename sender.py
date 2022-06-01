@@ -10,6 +10,7 @@ ID = '881967a8'
 HOST = '10.0.7.141'
 PORT = 6670
 ADDR = (HOST, PORT)
+ADDR2 = (HOST, 9000)
 
 # Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -22,7 +23,7 @@ def checksum(packet):
 
 def main():
     UDP_SOCKET.bind((socket.gethostbyname(socket.gethostname()), PORT))
-    UDP_SOCKET.sendto(f'ID{ID}'.encode(), ADDR)
+    UDP_SOCKET.sendto(f'ID{ID}'.encode(), ADDR2)
 
     data, addr = UDP_SOCKET.recvfrom(1024)
     transaction = data.decode()
