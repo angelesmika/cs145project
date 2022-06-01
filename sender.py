@@ -51,7 +51,7 @@ def main():
     seqNum = 0
     msgLen = max(1, math.ceil(payloadSize / 90))
 
-    while idx < payloadSize:
+    for i in range(0, payloadSize):
         start = time.time()
 
         while True:
@@ -80,6 +80,10 @@ def main():
         seqNum += 1
         idx += msgLen
         print()
+
+        if i == 0:
+            msgLen = math.ceil(int((start - end) * payloadSize / 90))
+            msgLen += msgLen // ((payloadSize // msgLen) - 5)
 
 if __name__ == "__main__":
     main()
