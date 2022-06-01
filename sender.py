@@ -63,10 +63,9 @@ def main():
             except socket.error:
                 msgLen = int(msgLen * 0.90)
             
-            
-            if ACK == CHECKSUM:
-                    print(">> Checksums match!")
-                    break
+            if ACK[-32:] == CHECKSUM:
+                print(">> Checksums match!")
+                break
         
         seqNum += 1
         idx += msgLen
