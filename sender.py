@@ -21,7 +21,7 @@ def checksum(packet):
     return hashlib.md5(packet.encode('utf-8')).hexdigest()
 
 def main():
-    UDP_SOCKET.bind(('', PORT))
+    UDP_SOCKET.bind((socket.gethostbyname(socket.gethostname()), PORT))
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), ADDR)
 
     data, addr = UDP_SOCKET.recvfrom(1024)
