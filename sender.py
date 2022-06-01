@@ -48,8 +48,8 @@ def main():
     while idx < payloadSize:
         last = 0 if idx + msgLen < payloadSize else 1
         while True:
-            msg = payload[idx:payloadSize-1] if idx + msgLen == payloadSize else payload[idx:idx + msgLen]
-            packet = f'ID{ID}SN{str(seqNum).zfill(7)}TXN{transactionID}LAST{str(last)}{msg}'
+            msg = payload[idx:idx+msgLen] if idx + msgLen < payloadSize else payload[idx:]
+            packet = f"ID{ID}SN{str(seqNum).zfill(7)}TXN{transactionID}LAST{str(last)}{msg}"
 
             UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
             print(f"Packet sent: {packet}")
@@ -59,7 +59,7 @@ def main():
             print(f"Checksum: {ACK}")
 
             CHECKSUM = checksum(packet)
-            if ACK[-32:] == CHECKSUM:
+            if ACK == CHECKSUM:
                 print(">> Checksums match!")
                 break
         
