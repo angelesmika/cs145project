@@ -54,12 +54,11 @@ def main():
 
             UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
             try:
-                data, addr = UDP_SOCKET.recvfrom(1024)
+                ACK = UDP_SOCKET.recv(64).decode()
                 print(f"Packet sent: {packet}")
             except socket.error:
                 msgLen = int(msgLen * 0.90)
             else:
-                ACK = data.decode()
                 if ACK == CHECKSUM:
                     print(">> Checksums match!")
                     break
