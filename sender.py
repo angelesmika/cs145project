@@ -2,6 +2,8 @@
 # 201800527
 # CS 145 Project
 
+import math
+import time
 import socket
 import hashlib
 
@@ -47,9 +49,11 @@ def main():
 
     idx = 0
     seqNum = 0
-    msgLen = max(1, payloadSize // 90)
+    msgLen = max(1, math.ceil(payloadSize / 90))
 
     while idx < payloadSize:
+        start = time.time()
+
         while True:
             print(F"> Message length: {msgLen}")
             last = 0 if idx + msgLen < payloadSize else 1
@@ -70,6 +74,9 @@ def main():
                 print(">> Checksums match!")
                 break
         
+        end = time.time()
+        UDP_SOCKET.settimeout(end - start + 5)
+
         seqNum += 1
         idx += msgLen
         print()
