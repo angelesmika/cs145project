@@ -33,23 +33,27 @@ def main():
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), DST_ADDR)
 
     # Receive packets and print transaction ID
-    data, addr = UDP_SOCKET.recvfrom(1024)
+    data, addr = UDP_SOCKET.recvfrom(64)
     transactionID = data.decode()
     print(f"Transaction ID: {transactionID}")
 
     # Load and read the payload from file
     payload = FILE.read()
     payloadSize = len(payload)
+    print(f"> Payload size: {payloadSize}")
 
     idx = 0
     seqNum = 0
     msgLen = max(1, payloadSize // 90)
 
     while idx < payloadSize:
-        last = 0 if idx + msgLen < payloadSize else 1
         while True:
+            print(F"> Message length: {msgLen}")
+            last = 0 if idx + msgLen < payloadSize else 1
+
             msg = payload[idx:idx+msgLen] if idx + msgLen < payloadSize else payload[idx:]
             packet = f"ID{ID}SN{str(seqNum).zfill(7)}TXN{transactionID}LAST{str(last)}{msg}"
+            
             CHECKSUM = checksum(packet)
 
             UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
