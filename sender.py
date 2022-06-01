@@ -62,8 +62,9 @@ def main():
                 print(f"Packet sent: {packet}")
             except socket.error:
                 msgLen = int(msgLen * 0.90)
-            else:
-                if ACK == CHECKSUM:
+            
+            
+            if ACK == CHECKSUM:
                     print(">> Checksums match!")
                     break
         
