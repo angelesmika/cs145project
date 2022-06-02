@@ -7,51 +7,42 @@ import sys
 import math
 import time
 import socket
-import getopt
 import hashlib
-
-# Initialize default variables
-ID = '881967a8'
-FILE = '881967a8.txt'
-ADDR = '10.0.7.141'
-RCV_PORT = 9000
-SEND_PORT = 6670
-HOST_NAME = socket.gethostbyname(socket.gethostname())
+import argparse
 
 # Checksum function
 # Given in the project specifications
 def checksum(packet):
     return hashlib.md5(packet.encode('utf-8')).hexdigest()
 
-# Parse user input in the terminal using getopt library
-# Source: https://www.geeksforgeeks.org/getopt-module-in-python/
+# Parse user input in the terminal using argparse library
+# Source: https://docs.python.org/3/library/argparse.html
 def parse_input(str):
-    global FILE, ADDR, RCV_PORT, SEND_PORT, ID
-    try:
-        flags, args = getopt.getopt(str, "f:a:s:c:i:")
-    except:
-        print(">> No additional flags found.")
+    cmd = argparse.ArgumentParser()
+    cmd.add_argument("-f", default="881967a8.txt")
+    cmd.add_argument("-a", default="10.0.7.141")
+    cmd.add_argument("-s", default=9000)
+    cmd.add_argument("-c", default=6670)
+    cmd.add_argument("-i", default="881967a8")
+    cmd.parse_args()
 
-    for flag, arg in flags:
-        if flag in ['-f']:      # -f denotes the filename of the payload
-            FILE = flag
-        elif flag in ['-a']:    # -a denotes the IP address of the receiver to be contacted
-            ADDR = flag
-        elif flag in ['-s']:    # -s denotes the port to be used by the receiver
-            RCV_PORT = flag
-        elif flag in ['-c']:    # -c denotes the port to be used by the sender
-            SEND_PORT = flag
-        elif flag in ['-i']:    # -i denotes the unique ID
-            ID = flag
-
-    return
+    return cmd
 
 def main():
-    # Parse the user input in the terminal
-    parse_input(sys.argv[1:])
+    cmd = parse_input(sys.argv[1:])   # Parse user input in the terminal
 
-    # Initiate UDP connection
-    UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    # Initialize variables
+    ID = cmd.i
+    FILE = cmd.f
+    ADDR = cmd.a
+    RCV_PORT = cmd.s
+    SEND_PORT = cmd.c
+
+    # Print variables
+    print(f">> Commands: {cmd}")
+
+    UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)    # Initiate UDP connection
+    HOST_NAME = socket.gethostbyname(socket.gethostname())          # Get host name
 
     DST_ADDR = (ADDR, RCV_PORT)                # Initialize the address to be used
     UDP_SOCKET.bind((HOST_NAME, SEND_PORT))    # Bind the UDP socket to host and port
