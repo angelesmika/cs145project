@@ -42,6 +42,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
     # While the packet is not being sent, remove 5% of the payload
     # until the maximum acceptable packet size is obtained
     while True:
+        print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
         packet = f"ID{ID}SN{str(0).zfill(7)}TXN{TID}LAST{str(0)}{msg}"
