@@ -30,7 +30,7 @@ def parse_input(str):
     try:
         flags, args = getopt.getopt(str, "f:a:s:c:i:")
     except:
-        return ">> No additional flags found."
+        print(">> No additional flags found.")
 
     for flag, arg in flags:
         if flag in ['-f']:      # -f denotes the filename of the payload
@@ -53,15 +53,14 @@ def main():
     # Initiate UDP connection
     UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
-    DST_ADDR = (ADDR, SEND_PORT)                # Initialize the address to be used
-    UDP_SOCKET.bind((HOST_NAME, SEND_PORT))     # Bind the UDP socket to host and port
+    DST_ADDR = (ADDR, SEND_PORT)              # Initialize the address to be used
+    UDP_SOCKET.bind((HOST_NAME, RCV_PORT))    # Bind the UDP socket to host and port
 
     # Initiate a transaction and send ID
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), DST_ADDR)
 
     # Receive packets and print transaction ID
-    data, x = UDP_SOCKET.recvfrom(64)
-    transactionID = data.decode()
+    transactionID = UDP_SOCKET.recv(64).decode()
     print(f"Transaction ID: {transactionID}")
 
 if __name__ == "__main__":
