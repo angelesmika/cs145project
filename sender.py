@@ -38,7 +38,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
     print(f">> Total payload size: {payloadSize}")
 
     # Assume that 10% of the payload can be sent on the first try
-    msg_len = max(1, math.ceil(payloadSize // 90))
+    msg_len = max(1, math.ceil(payloadSize // 10))
 
     # While the packet is not being sent, remove 5% of the payload
     # until the maximum acceptable packet size is obtained
