@@ -75,8 +75,9 @@ def main():
             try:
                 ACK = UDP_SOCKET.recv(64).decode()
                 print(f"Packet sent: {packet}")
-            except socket.error:
+            except socket.error or socket.timeout:
                 msgLen = int(msgLen * 0.90)
+                continue
             
             if ACK[-32:] == CHECKSUM:
                 print(">> Checksums match!")
