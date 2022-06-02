@@ -36,8 +36,8 @@ def main():
     ID = cmd.i
     FILE = cmd.f
     ADDR = cmd.a
-    RCV_PORT = cmd.s
-    SEND_PORT = cmd.c
+    RCV_PORT = int(cmd.s)
+    SEND_PORT = int(cmd.c)
 
     # Print variables
     print(f">> Commands: -i: {ID} | -f: {FILE} | -a: {ADDR} | -s: {RCV_PORT} | -c: {SEND_PORT}")
