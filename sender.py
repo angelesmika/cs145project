@@ -18,13 +18,14 @@ def checksum(packet):
 # Parse user input in the terminal using argparse library
 # Source: https://docs.python.org/3/library/argparse.html
 def parse_input(str):
-    cmd = argparse.ArgumentParser()
-    cmd.add_argument("-f", default="881967a8.txt")
-    cmd.add_argument("-a", default="10.0.7.141")
-    cmd.add_argument("-s", default=9000)
-    cmd.add_argument("-c", default=6670)
-    cmd.add_argument("-i", default="881967a8")
-    cmd.parse_args()
+    args = argparse.ArgumentParser()
+    args.add_argument("-f", default="881967a8.txt")
+    args.add_argument("-a", default="10.0.7.141")
+    args.add_argument("-s", default=9000)
+    args.add_argument("-c", default=6670)
+    args.add_argument("-i", default="881967a8")
+    
+    cmd = args.parse_args()
 
     return cmd
 
