@@ -49,9 +49,6 @@ def get_max_payload_size(ID, TID, DEST, payload):
         packet = f"ID{ID}SN{str(0).zfill(7)}TXN{TID}LAST{str(0)}{msg}"
         print(f"Message: {packet}")
 
-        # Obtain the checksum of the packet
-        CHECKSUM = checksum(packet)
-
         # Send the packet to the server and check if it returns an error
         # If an error is returned, decrease msg_len by 5% and try sending
         # the packet again until the server validates the packet
@@ -61,9 +58,10 @@ def get_max_payload_size(ID, TID, DEST, payload):
         except socket.error or socket.timeout:
             msg_len = int(msg_len * 0.95)
             continue
-
-        if ACK[-32:] == CHECKSUM:
-            print(f">> Checksums match! Maximum payload size is {msg_len}")
+        
+        # Check if the packet is valid
+        if ACK[-32:] == checksum(packet):
+            print(f">> Checksums match! {msg_len} characters can be sent per run!")
             break
 
     return msg_len
@@ -79,7 +77,7 @@ def main():
     SEND_PORT = int(cmd.c)
 
     # Print variables
-    print(f">> Commands: -i: {ID} | -f: {FILE} | -a: {ADDR} | -s: {RCV_PORT} | -c: {SEND_PORT}")
+    print(f"[ -i: {ID} | -f: {FILE} | -a: {ADDR} | -s: {RCV_PORT} | -c: {SEND_PORT} ]")
 
     # Get host name
     HOST_NAME = socket.gethostbyname(socket.gethostname())
@@ -95,7 +93,27 @@ def main():
     print(f"Transaction ID: {TID}")
 
     payload = open(FILE).read()
+    payload_size = len(payload)
     msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload)
+
+    SN = 0
+    idx = 0
+    while idx < payload_size:
+        # Get the part of the payload to be sent
+        msg = payload[idx : idx + msg_len] if idx + msg_len < payload_size else payload[idx : payload_size - 1]
+        
+        # Format the packet to be sent
+        Z = 0 if idx + msg_len < payload_size else 1
+        packet = f"ID{ID}SN{str(SN).zfill(7)}TXN{TID}LAST{Z}{msg}"
+        
+        # Send the packet to the server and check if valid
+        UDP_SOCKET.sendto(f'ID{ID}'.encode(), DST_ADDR)
+        ACK = UDP_SOCKET.recv(64).decode()
+        if ACK[-32:] == checksum(packet):
+            print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})\n")
+
+        SN += 1
+        idx += msg_len
 
 if __name__ == "__main__":
     main()
