@@ -106,6 +106,7 @@ def main():
         # Format the packet to be sent
         Z = 0 if idx + msg_len < payload_size else 1
         packet = f"ID{ID}SN{str(SN).zfill(7)}TXN{TID}LAST{Z}{msg}"
+        print(f"Packet: {packet}\n")
         
         # Send the packet to the server and print
         UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
