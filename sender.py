@@ -2,6 +2,7 @@
 # 201800527
 # CS 145 Project
 
+import sys
 import math
 import time
 import socket
@@ -27,6 +28,11 @@ def checksum(packet):
 
 # Initialize main function
 def main():
+    # Print the arguments passed from the command line
+    print(f"> Number of arguments: {len(sys.argv)}")
+
+    for arg in sys.argv:
+        print("> " + arg)
 
     # Bind the UDP socket to host and port
     UDP_SOCKET.bind((HOST_NAME, PORT))
