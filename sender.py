@@ -42,17 +42,16 @@ def get_max_payload_size(ID, TID, DEST, payload):
     # While the packet is not being sent, remove 5% of the payload
     # until the maximum acceptable packet size is obtained
     while True:
-        msg = payload[idx : msg_len + idx] if idx + msg_len < payloadSize else payload[idx : payloadSize - 1]
+        msg = payload[0:msg_len]
 
-        z = 0 if idx + msg_len < payloadSize else 1
-        packet = f"ID{ID}SN{str(seq_num).zfill(7)}TXN{TID}LAST{str(z)}{msg}"
+        packet = f"ID{ID}SN{str(0).zfill(7)}TXN{TID}LAST{str(0)}{msg}"
         print(f"Message: {packet}")
 
         # Obtain the checksum of the packet
         CHECKSUM = checksum(packet)
 
         # Send the packet to the server and check if it returns an error
-        # If an error is recorded, decrease msg_len by 5% and try sending
+        # If an error is returned, decrease msg_len by 5% and try sending
         # the packet again until the server validates the packet
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
