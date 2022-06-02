@@ -60,7 +60,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
-            print(f">> Checksums match! {msg_len} characters can be sent per run!")
+            print(f">> Checksums match! {msg_len} characters can be sent per run!\n")
             break
 
     return msg_len
@@ -112,7 +112,7 @@ def main():
         UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
         ACK = UDP_SOCKET.recv(64).decode()
         if ACK[-32:] == checksum(packet):
-            print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})\n")
+            print(f">> PACKET SENT: {packet} \t ({idx}/{payload_size})\n")
 
         SN += 1
         idx += msg_len
