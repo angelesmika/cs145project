@@ -31,8 +31,10 @@ def main():
     # Print the arguments passed from the command line
     print(f"> Number of arguments: {len(sys.argv)}")
 
+    print("\n======== ARGUMENTS ========")
     for arg in sys.argv:
         print("> " + arg)
+    print("===========================\n")
 
     # Bind the UDP socket to host and port
     UDP_SOCKET.bind((HOST_NAME, PORT))
@@ -86,10 +88,6 @@ def main():
         seqNum += 1
         idx += msgLen
         print()
-
-        if i == 0:
-            msgLen = math.ceil(int((start - end) * payloadSize / 90))
-            msgLen += msgLen // ((payloadSize // msgLen) - 5)
 
 if __name__ == "__main__":
     main()
