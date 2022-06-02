@@ -40,7 +40,7 @@ def main():
     SEND_PORT = cmd.c
 
     # Print variables
-    print(f">> Commands: {cmd}")
+    print(f">> Commands: -i: {ID} | -f: {FILE} | -a: {ADDR} | -s: {RCV_PORT} | -c: {SEND_PORT}")
 
     UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)    # Initiate UDP connection
     HOST_NAME = socket.gethostbyname(socket.gethostname())          # Get host name
