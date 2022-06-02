@@ -53,8 +53,8 @@ def main():
     # Initiate UDP connection
     UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
-    DST_ADDR = (ADDR, SEND_PORT)              # Initialize the address to be used
-    UDP_SOCKET.bind((HOST_NAME, RCV_PORT))    # Bind the UDP socket to host and port
+    DST_ADDR = (ADDR, RCV_PORT)                # Initialize the address to be used
+    UDP_SOCKET.bind((HOST_NAME, SEND_PORT))    # Bind the UDP socket to host and port
 
     # Initiate a transaction and send ID
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), DST_ADDR)
