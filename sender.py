@@ -63,7 +63,8 @@ def main():
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), DST_ADDR)
 
     # Receive packets and print transaction ID
-    transactionID = UDP_SOCKET.recv(64).decode()
+    data, x = UDP_SOCKET.recvfrom(64)
+    transactionID = data.decode()
     print(f"Transaction ID: {transactionID}")
 
 if __name__ == "__main__":
