@@ -104,8 +104,15 @@ def main():
         packet = f"ID{ID}SN{str(SN).zfill(7)}TXN{TID}LAST{Z}{msg}"
         
         # Send the packet to the server and check if valid
+        # If not, reduce payload by 5%
         UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
-        ACK = UDP_SOCKET.recv(64).decode()
+
+        try:
+            ACK = UDP_SOCKET.recv(64).decode()
+        except socket.error:
+            msg_len = int(msg_len * 0.95)
+            continue
+
         if ACK[-32:] == checksum(packet):
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})\n")
 
