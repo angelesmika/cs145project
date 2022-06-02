@@ -46,18 +46,22 @@ def get_max_payload_size(ID, TID, DEST, payload):
         msg = payload[0:msg_len]
 
         packet = f"ID{ID}SN{str(0).zfill(7)}TXN{TID}LAST{str(0)}{msg}"
-        print(f"Packet: {packet}")
+        print(f"Message: {packet}")
 
         # Send the packet to the server and check if it returns an error
         # If an error is returned, decrease msg_len by 5% and try sending
         # the packet again until the server validates the packet
         UDP_SOCKET.sendto(packet.encode(), DEST)
-        ACK = UDP_SOCKET.recv(64).decode()
-        if ACK[-32:] == checksum(packet):
-            print(f">> Checksums match! {msg_len} characters can be sent per run!\n")
-            break
-        else:
+        try:
+            ACK = UDP_SOCKET.recv(64).decode()
+        except socket.error or socket.timeout:
             msg_len = int(msg_len * 0.95)
+            continue
+        
+        # Check if the packet is valid
+        if ACK[-32:] == checksum(packet):
+            print(f">> Checksums match! {msg_len} characters can be sent per run!")
+            break
 
     return msg_len
 
@@ -93,8 +97,8 @@ def main():
 
     msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload)
 
-    SN = 0
-    idx = 0
+    SN = 1
+    idx = msg_len
     while idx < payload_size:
         # Get the part of the payload to be sent
         msg = payload[idx : idx + msg_len] if idx + msg_len < payload_size else payload[idx : payload_size - 1]
@@ -103,16 +107,9 @@ def main():
         Z = 0 if idx + msg_len < payload_size else 1
         packet = f"ID{ID}SN{str(SN).zfill(7)}TXN{TID}LAST{Z}{msg}"
         
-        # Send the packet to the server and check if valid
-        # If not, reduce payload by 5%
+        # Send the packet to the server and print
         UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
-
-        try:
-            ACK = UDP_SOCKET.recv(64).decode()
-        except socket.error:
-            msg_len = int(msg_len * 0.95)
-            continue
-
+        ACK = UDP_SOCKET.recv(64).decode()
         if ACK[-32:] == checksum(packet):
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})\n")
 
