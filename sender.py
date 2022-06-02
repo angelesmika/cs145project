@@ -34,8 +34,6 @@ def parse_input(str):
     return cmd
 
 def get_max_payload_size(ID, TID, DEST, payload):
-    idx = 0
-    seq_num = 0
     payloadSize = len(payload)
 
     # Assume that 10% of the payload can be sent on the first try
@@ -43,7 +41,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
 
     # While the packet is not being sent, remove 5% of the payload
     # until the maximum acceptable packet size is obtained
-    while (idx < payloadSize):
+    while True:
         msg = payload[idx : msg_len + idx] if idx + msg_len < payloadSize else payload[idx : payloadSize - 1]
 
         z = 0 if idx + msg_len < payloadSize else 1
@@ -65,6 +63,9 @@ def get_max_payload_size(ID, TID, DEST, payload):
 
         if ACK[-32:] == CHECKSUM:
             print(f">> Checksums match! Maximum payload size is {msg_len}")
+            break
+
+    return msg_len
 
 def main():
     cmd = parse_input(sys.argv[1:])   # Parse user input in the terminal
@@ -93,7 +94,7 @@ def main():
     print(f"Transaction ID: {TID}")
 
     payload = open(FILE).read()
-    get_max_payload_size(ID, TID, DST_ADDR, payload)
+    msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload)
 
 if __name__ == "__main__":
     main()
