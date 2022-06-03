@@ -128,7 +128,7 @@ def main():
     end = time.time()
 
     print("\n=====================================================================")
-    print(f"Transaction with ID {TID} successful! Time elapsed: {round(end - start}, 3)")
+    print(f"Transaction with ID {TID} successful! Time elapsed: {round(end - start)}, 3)")
     print("=====================================================================")
 
 if __name__ == "__main__":
