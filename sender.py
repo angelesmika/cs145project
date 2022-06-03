@@ -48,11 +48,11 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
-        packet = f"ID{ID}SN{str(0).zfill(7)}TXN{TID}LAST{str(0)}{msg}"
+        packet = f"ID{ID}SN0000000TXN{TID}LAST0{msg}"
         print(f"Message: {packet}")
 
         # Send the packet to the server and check if it returns an error
-        # If an error is returned, decrease msg_len by 5% and try sending
+        # If an error is returned, decrease msg_len by 10% and try sending
         # the packet again until the server validates the packet
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
@@ -69,7 +69,7 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
             print(f"Time elapsed: {round((end - start), 3)}")
 
             print("\n---\n")
-            
+
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})")
             break
 
