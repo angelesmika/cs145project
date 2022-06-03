@@ -39,6 +39,7 @@ def parse_input(str):
 def get_max_payload_size(ID, TID, DEST, payload, start):
     payload_size = len(payload)
     sliced = False
+    n = 0.90
 
     # Assume that 10% of the payload can be sent on the first try
     msg_len = max(1, math.ceil(payload_size // 10))
@@ -53,20 +54,19 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
         print(f"Message: {packet}")
 
         # Send the packet to the server and check if it returns an error
-        # If an error is returned, decrease msg_len by 10% and try sending
-        # the packet again until the server validates the packet
+        # If an error is returned, decrease msg_len by n% (n = 10 at first)
+        # and try sending the packet again until the server validates the packet
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
             end = time.time()
             if (end - start) > 25 and not sliced:
-                print(">> 25 seconds exceeded! Now slicing the payload...")
+                print("\n>> 25 seconds exceeded! Now slicing the payload...")
                 sliced = True
-                msg_len = max(1, math.ceil(int(msg_len * 0.25)))        # Decrease the payload size by 75% once probing exceeds 25 seconds
-            else:
-                msg_len = int(msg_len * 0.90)
+                n = 0.25        # Continuously decrease the payload size by 75% instead of 10% once probing exceeds 25 seconds
             
+            msg_len = int(msg_len * n)
             continue
         
         # Check if the packet is valid
