@@ -39,7 +39,7 @@ def parse_input(str):
 def get_max_payload_size(ID, TID, DEST, payload, start):
     payload_size = len(payload)
     sliced = False
-    
+
     # Assume that 10% of the payload can be sent on the first try
     msg_len = max(1, math.ceil(payload_size // 10))
 
@@ -61,8 +61,9 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
         except socket.error:
             end = time.time()
             if (end - start) > 25 and not sliced:
+                print(">> 25 seconds exceeded! Now slicing the payload...")
                 sliced = True
-                msg_len = max(1, math.ceil(int(msg_len * 0.10)))        # Decrease the payload size by 90% once probing exceeds 25 seconds
+                msg_len = max(1, math.ceil(int(msg_len * 0.25)))        # Decrease the payload size by 75% once probing exceeds 25 seconds
             else:
                 msg_len = int(msg_len * 0.90)
             
