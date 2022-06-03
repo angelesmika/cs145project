@@ -45,6 +45,7 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
     # While the packet is not being sent, remove 10% of the payload
     # until the maximum acceptable packet size is obtained
     while True:
+        sliced = False
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
@@ -61,9 +62,10 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
         except socket.error:
             msg_len = int(msg_len * 0.90)
             continue
-        except (end - start) > 25:
-            msg_len = max(1, math.ceil(int(msg_len * 0.10)))     # Decrease the payload size by 90% once probing exceeds 25 seconds
-            continue
+        except (end - start) > 25 and not sliced:
+            sliced = True
+            msg_len = max(1, math.ceil(int(msg_len * 0.10)))        # Decrease the payload size by 90%
+            continue                                                # once probing exceeds 25 seconds
         
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
