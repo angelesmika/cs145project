@@ -61,7 +61,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
-            print("================================================")
+            print("\n---\n")
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})\n")
             break
 
@@ -105,8 +105,11 @@ def main():
     SN = 1
     idx = msg_len
     while idx < payload_size:
+        # Get the (cumulative) length of the payload sent
+        sent = idx + msg_len if idx + msg_len < payload_size else payload_size - 1
+
         # Get the part of the payload to be sent
-        msg = payload[idx : idx + msg_len] if idx + msg_len < payload_size else payload[idx : payload_size - 1]
+        msg = payload[idx:sent]
         
         # Format the packet to be sent
         Z = 0 if idx + msg_len < payload_size else 1
@@ -116,7 +119,7 @@ def main():
         UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
         ACK = UDP_SOCKET.recv(64).decode()
         if ACK[-32:] == checksum(packet):
-            print(f">> PACKET SENT: {packet} \t ({idx + msg_len}/{payload_size})\n")
+            print(f">> PACKET SENT: {packet} \t ({sent if Z == 1 else sent + 1}/{payload_size})")
 
         SN += 1
         idx += msg_len
@@ -124,7 +127,9 @@ def main():
     # End timer
     end = time.time()
 
-    print(f"================================================\nTransaction with ID {TID} successful! Time elapsed: {end - start}\n================================================")
+    print("\n=====================================================================")
+    print(f"Transaction with ID {TID} successful! Time elapsed: {end - start}")
+    print("=====================================================================")
 
 if __name__ == "__main__":
     main()
