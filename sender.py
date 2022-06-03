@@ -61,6 +61,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
+            print("================================================")
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})\n")
             break
 
@@ -123,7 +124,7 @@ def main():
     # End timer
     end = time.time()
 
-    print(f"================\nTransaction successful! Time elapsed: {end - start}\n================")
+    print(f"================================================\nTransaction with ID {TID} successful! Time elapsed: {end - start}\n================================================")
 
 if __name__ == "__main__":
     main()
