@@ -123,8 +123,9 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            global timeout
-            UDP_SOCKET.settimeout(timeout + 1)  # Add 1 second to the timeout to account for delay
+            end = time.time()
+            print(f"Time elapsed: {round((end - start), 3)}")
+            break
 
         if ACK[-32:] == checksum(packet):
             print(f">> PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
@@ -136,7 +137,7 @@ def main():
     end = time.time()
 
     print("\n=====================================================================")
-    print(f"Transaction with ID {TID} successful! Time elapsed: {round((end - start), 3)}")
+    print(f"Transaction with ID {TID} terminated! Time elapsed: {round((end - start), 3)}")
     print("=====================================================================")
 
 if __name__ == "__main__":
