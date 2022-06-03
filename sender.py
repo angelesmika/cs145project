@@ -36,7 +36,7 @@ def parse_input(str):
 
     return cmd
 
-def get_max_payload_size(ID, TID, DEST, payload):
+def get_max_payload_size(ID, TID, DEST, payload, start):
     payload_size = len(payload)
     
     # Assume that 10% of the payload can be sent on the first try
@@ -64,7 +64,12 @@ def get_max_payload_size(ID, TID, DEST, payload):
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
+
+            end = time.time()
+            print(f"Time elapsed: {round((end - start), 3)}")
+
             print("\n---\n")
+            
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})")
             break
 
@@ -103,7 +108,7 @@ def main():
     payload_size = len(payload)
     print(f"Total payload size: {payload_size}")
 
-    msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload)
+    msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload, start)
 
     SN = 1
     idx = msg_len
@@ -123,8 +128,6 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            end = time.time()
-            print(f"Time elapsed: {round((end - start), 3)}")
             break
 
         if ACK[-32:] == checksum(packet):
