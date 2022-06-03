@@ -123,8 +123,8 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            timeout += 1                        # Add 1 second to the timeout to account for delay
-            UDP_SOCKET.settimeout(timeout)
+            global timeout
+            UDP_SOCKET.settimeout(timeout + 1)  # Add 1 second to the timeout to account for delay
 
         if ACK[-32:] == checksum(packet):
             print(f">> PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
