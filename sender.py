@@ -62,9 +62,9 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
         except socket.error:
             end = time.time()
             if (end - start) > 25 and not sliced:
-                print("\n>> 25 seconds exceeded! Now slicing the payload...")
+                print("\n>> 15 seconds exceeded! Now slicing the payload...")
                 sliced = True
-                n = 0.50        # Continuously decrease the payload size by 50% instead of 10% once probing exceeds 25 seconds
+                n = 0.50        # Continuously decrease the payload size by 50% instead of 10% once probing exceeds 15 seconds
             
             msg_len = int(msg_len * n)
             continue
