@@ -57,8 +57,12 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
+            end = time.time()
         except socket.error:
             msg_len = int(msg_len * 0.90)
+            continue
+        except (end - start) > 25:
+            msg_len = max(1, math.ceil(int(msg_len * 0.10)))     # Decrease the payload size by 90% once probing exceeds 25 seconds
             continue
         
         # Check if the packet is valid
