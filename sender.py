@@ -34,10 +34,10 @@ def parse_input(str):
     return cmd
 
 def get_max_payload_size(ID, TID, DEST, payload):
-    payloadSize = len(payload)
+    payload_size = len(payload)
     
     # Assume that 10% of the payload can be sent on the first try
-    msg_len = max(1, math.ceil(payloadSize // 10))
+    msg_len = max(1, math.ceil(payload_size // 10))
 
     # While the packet is not being sent, remove 5% of the payload
     # until the maximum acceptable packet size is obtained
@@ -60,7 +60,8 @@ def get_max_payload_size(ID, TID, DEST, payload):
         
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
-            print(f">> Checksums match! {msg_len} characters can be sent per run!\n")
+            print(f">> Checksums match! {msg_len} characters can be sent per run!")
+            print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})\n")
             break
 
     return msg_len
@@ -106,13 +107,12 @@ def main():
         # Format the packet to be sent
         Z = 0 if idx + msg_len < payload_size else 1
         packet = f"ID{ID}SN{str(SN).zfill(7)}TXN{TID}LAST{Z}{msg}"
-        print(f"Packet: {packet}\n")
         
         # Send the packet to the server and print
         UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
         ACK = UDP_SOCKET.recv(64).decode()
         if ACK[-32:] == checksum(packet):
-            print(f">> PACKET SENT: {packet} \t ({idx}/{payload_size})\n")
+            print(f">> PACKET SENT: {packet} \t ({idx + msg_len}/{payload_size})\n")
 
         SN += 1
         idx += msg_len
