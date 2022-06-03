@@ -85,6 +85,9 @@ def main():
     DST_ADDR = (ADDR, RCV_PORT)                # Initialize the address to be used
     UDP_SOCKET.bind((HOST_NAME, SEND_PORT))    # Bind the UDP socket to host and port
 
+    # Start timer
+    start = time.time()
+
     # Initiate a transaction and send ID
     UDP_SOCKET.sendto(f'ID{ID}'.encode(), DST_ADDR)
 
@@ -116,6 +119,11 @@ def main():
 
         SN += 1
         idx += msg_len
+
+    # End timer
+    end = time.time()
+
+    print(f"================\nTransaction successful! Time elapsed: {end - start}\n================")
 
 if __name__ == "__main__":
     main()
