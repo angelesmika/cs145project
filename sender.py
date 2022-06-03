@@ -36,13 +36,13 @@ def parse_input(str):
 
     return cmd
 
-def get_max_payload_size(ID, TID, DEST, payload, start):
+def get_max_payload_size(ID, TID, DEST, payload):
     payload_size = len(payload)
     sliced = False
     n = 0.90
 
-    # Assume that 10% of the payload can be sent on the first try
-    msg_len = max(1, math.ceil(payload_size // 10))
+    # Assume that all packets will be sent in 100 seconds (1 second per packet)
+    msg_len = max(1, math.ceil(payload_size // 100))
 
     # While the packet is not being sent, remove 10% of the payload
     # until the maximum acceptable packet size is obtained
@@ -54,30 +54,19 @@ def get_max_payload_size(ID, TID, DEST, payload, start):
         print(f"Message: {packet}")
 
         # Send the packet to the server and check if it returns an error
-        # If an error is returned, decrease msg_len by n% (n = 10 at first)
-        # and try sending the packet again until the server validates the packet
+        # If an error is returned, decrease msg_len by 10% and try sending
+        # the packet again until the server validates the packet
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            end = time.time()
-            if (end - start) > 10 and not sliced:
-                print("\n>> 10 seconds exceeded! Now slicing by half...")
-                sliced = True
-                n = 0.50        # Continuously decrease the payload size by 50% instead of 10% once probing exceeds 10 seconds
-            
-            msg_len = int(msg_len * n)
+            msg_len = int(msg_len * 0.90)
             continue
         
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
-
-            end = time.time()
-            print(f"Time elapsed: {round((end - start), 3)}")
-
             print("\n---\n")
-
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})")
             break
 
@@ -116,7 +105,7 @@ def main():
     payload_size = len(payload)
     print(f"Total payload size: {payload_size}")
 
-    msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload, start)
+    msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload)
 
     SN = 1
     idx = msg_len
