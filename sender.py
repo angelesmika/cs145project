@@ -10,9 +10,12 @@ import socket
 import hashlib
 import argparse
 
+# Set timeout
+timeout = 10
+
 # Initiate UDP connection and set a timeout
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-UDP_SOCKET.settimeout(10)
+UDP_SOCKET.settimeout(timeout)
 
 # Checksum function
 # Given in the project specifications
@@ -54,7 +57,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
-        except socket.error or socket.timeout:
+        except socket.error:
             msg_len = int(msg_len * 0.95)
             continue
         
@@ -117,9 +120,14 @@ def main():
         
         # Send the packet to the server and print
         UDP_SOCKET.sendto(packet.encode(), DST_ADDR)
-        ACK = UDP_SOCKET.recv(64).decode()
+        try:
+            ACK = UDP_SOCKET.recv(64).decode()
+        except socket.error:
+            timeout += 1                        # Add 1 second to the timeout to account for delay
+            UDP_SOCKET.settimeout(timeout)
+
         if ACK[-32:] == checksum(packet):
-            print(f">> PACKET SENT: {packet} \t ({sent if Z == 1 else sent + 1}/{payload_size})")
+            print(f">> PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
 
         SN += 1
         idx += msg_len
