@@ -42,7 +42,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
     # Assume that 10% of the payload can be sent on the first try
     msg_len = max(1, math.ceil(payload_size // 10))
 
-    # While the packet is not being sent, remove 5% of the payload
+    # While the packet is not being sent, remove 10% of the payload
     # until the maximum acceptable packet size is obtained
     while True:
         print(F"\nMessage length: {msg_len}")
@@ -58,7 +58,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            msg_len = int(msg_len * 0.95)
+            msg_len = int(msg_len * 0.90)
             continue
         
         # Check if the packet is valid
