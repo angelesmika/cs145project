@@ -24,7 +24,7 @@ def checksum(packet):
 
 # Parse user input in the terminal using argparse library
 # Source: https://docs.python.org/3/library/argparse.html
-def parse_input(str):
+def parse_input():
     args = argparse.ArgumentParser()
     args.add_argument("-f", default="881967a8.txt")
     args.add_argument("-a", default="10.0.7.141")
@@ -37,7 +37,6 @@ def parse_input(str):
     return cmd
 
 def get_payload_size(ID, TID, DEST, payload):
-    first = True
     payload_len = len(payload)
 
     # Assume that 10% of the packet can be sent at first try
@@ -73,7 +72,7 @@ def get_payload_size(ID, TID, DEST, payload):
     return msg_len
 
 def main():
-    cmd = parse_input(sys.argv[1:])   # Parse user input in the terminal
+    cmd = parse_input()   # Parse user input in the terminal
 
     # Initialize variables
     ID = cmd.i
