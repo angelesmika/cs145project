@@ -40,8 +40,8 @@ def get_max_payload_size(ID, TID, DEST, payload):
     first = True
     payload_size = len(payload)
 
-    # Assume that 1 packet will be sent per second over 100 seconds
-    msg_len = max(1, math.ceil(payload_size / 100))
+    # Assume that 1 packet will be sent per second over 90 seconds
+    msg_len = max(1, math.ceil(payload_size / 90))
 
     while True:
         print(F"\nMessage length: {msg_len}")
