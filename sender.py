@@ -89,7 +89,7 @@ def main():
     -a: {ADDR}
     -s: {RCV_PORT}
     -c: {SEND_PORT}
-    ========================\n''')
+========================\n''')
 
     # Get host name
     HOST_NAME = socket.gethostbyname(socket.gethostname())
@@ -131,13 +131,18 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            break
+            msg_len = int(msg_len * 0.90)   # Decrease msg_len by 10% if it is not accepted by the server
+            if socket.timeout:
+                break
+            else:
+                continue
 
         if ACK[-32:] == checksum(packet):
             print(f">> PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
 
         SN += 1
         idx += msg_len
+        msg_len = int(msg_len * 1.10)   # Increase msg_len by 10% to check if the server will still accept it
 
     # End timer
     end = time.time()
