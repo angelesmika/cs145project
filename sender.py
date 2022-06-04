@@ -77,7 +77,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
             print("\n---\n")
-            print(f"PACKET SENT: {packet} \t ({msg_len}/{payload_size})")
+            print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_size})")
             break
     
     return msg_len
@@ -123,8 +123,9 @@ def main():
 
     msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload)
 
-    SN = 1
-    idx = msg_len
+    i = 2           # Packet counter
+    SN = 1          # Sequence number
+    idx = msg_len   # Index to be accessed in the payload
     first = False
     while idx < payload_size:
         # Get the (cumulative) length of the payload sent
@@ -145,7 +146,7 @@ def main():
             break
 
         if ACK[-32:] == checksum(packet):
-            print(f"PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
+            print(f"({i})\tPACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
 
         SN += 1
         idx += msg_len
