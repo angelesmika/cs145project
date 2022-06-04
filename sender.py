@@ -40,8 +40,8 @@ def get_max_payload_size(ID, TID, DEST, payload):
     first = True
     payload_size = len(payload)
 
-    # Assume that 10% of the payload can be sent on the first try
-    msg_len = max(1, math.ceil(payload_size / 10))
+    # Assume that 1 packet will be sent per second over 100 seconds
+    msg_len = max(1, math.ceil(payload_size / 100))
 
     while True:
         print(F"\nMessage length: {msg_len}")
@@ -52,7 +52,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
 
         # Send the packet to the server and if an error is returned, get the
         # processing interval and multiply it by the payload size and divide
-        # the product by 100 seconds to get another approximate value for the
+        # the product by 90 seconds to get another approximate value for the
         # payload size accepted. If the packet is still not accepted, continue
         # probing by reducing the packet size by 10% until it is accepted.
         start = time.time()
@@ -63,8 +63,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
             end = time.time()
             if first:
                 first = False
-                new_msg_len = math.floor(end - start) * payload_size // 100
-                msg_len = math.ceil(msg_len * 0.90) if msg_len - 10 <= new_msg_len <= msg_len + 10 else new_msg_len
+                msg_len = payload_size // (math.floor(end - start) * payload_size // 90)
             else:
                 msg_len = math.ceil(msg_len * 0.90)
 
