@@ -115,6 +115,7 @@ def main():
 
     SN = 1
     idx = msg_len
+    rejected = False
     while idx < payload_size:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_size else payload_size - 1
@@ -131,17 +132,21 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            msg_len = int(msg_len * 0.90)   # Decrease msg_len by 10% if it is not accepted by the server
+            msg_len = int(msg_len * 0.75)   # Decrease msg_len by 25% if it is not accepted by the server
             if socket.timeout:
                 break
             else:
+                rejected = True
                 continue
 
         if ACK[-32:] == checksum(packet):
             print(f">> PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
 
         SN += 1
-        msg_len = int(msg_len * 1.10)   # Increase msg_len by 10% to check if the server will still accept it
+        
+        if not rejected:
+            msg_len = math.ceil(msg_len * 1.25)   # Increase msg_len by 25% to check if the server will still accept it
+        
         idx += msg_len
 
     # End timer
