@@ -83,7 +83,13 @@ def main():
     SEND_PORT = int(cmd.c)
 
     # Print variables
-    print(f"[ -i: {ID} | -f: {FILE} | -a: {ADDR} | -s: {RCV_PORT} | -c: {SEND_PORT} ]\n")
+    print(f'''========================
+    -i: {ID}
+    -f: {FILE}
+    -a: {ADDR}
+    -s: {RCV_PORT}
+    -c: {SEND_PORT}
+    ========================\n''')
 
     # Get host name
     HOST_NAME = socket.gethostbyname(socket.gethostname())
