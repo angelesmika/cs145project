@@ -68,7 +68,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
             print("\n---\n")
-            print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})")
+            print(f"PACKET SENT: {packet} \t ({msg_len}/{payload_size})")
             break
     
     return msg_len
