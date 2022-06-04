@@ -37,6 +37,7 @@ def parse_input(str):
     return cmd
 
 def get_max_payload_size(ID, TID, DEST, payload):
+    first = True
     payload_size = len(payload)
 
     # Assume that 10% of the payload can be sent on the first try
@@ -52,15 +53,21 @@ def get_max_payload_size(ID, TID, DEST, payload):
         # Send the packet to the server and if an error is returned, get the
         # processing interval and multiply it by the payload size and divide
         # the product by 100 seconds to get another approximate value for the
-        # payload size accepted and until the packet is accepted by the server
+        # payload size accepted. If the packet is still not accepted, continue
+        # probing by reducing the packet size by 10% until it is accepted.
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
             end = time.time()
+            if first:
+                first = False
+                msg_len = math.floor(end - start) * payload_size // 100
+            else:
+                msg_len = math.ceil(msg_len * 0.90)
+
             print(f"Packet send duration: {end - start}")
-            msg_len = math.floor(end - start) * payload_size // 100
             continue
         
         end = time.time()
