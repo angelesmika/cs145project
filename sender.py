@@ -141,8 +141,8 @@ def main():
             print(f">> PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
 
         SN += 1
-        idx += msg_len
         msg_len = int(msg_len * 1.10)   # Increase msg_len by 10% to check if the server will still accept it
+        idx += msg_len
 
     # End timer
     end = time.time()
