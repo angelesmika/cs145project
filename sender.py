@@ -51,13 +51,13 @@ def get_payload_size(ID, TID, DEST, payload):
         print(f"Message: {packet}")
 
         # Send the packet to the server and if an error is returned,
-        # reduce payload size by 10% until it is accepted
+        # reduce payload size by 15% until it is accepted
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            msg_len = math.ceil(msg_len * 0.90)
+            msg_len = int(msg_len * 0.85)
             continue
         
         end = time.time()
