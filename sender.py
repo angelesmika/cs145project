@@ -9,6 +9,7 @@ import time
 import socket
 import hashlib
 import argparse
+from tracemalloc import start
 
 # Set timeout
 timeout = 10
@@ -38,8 +39,6 @@ def parse_input(str):
 
 def get_max_payload_size(ID, TID, DEST, payload):
     payload_size = len(payload)
-    sliced = False
-    n = 0.90
 
     # Assume that all packets will be sent in 100 seconds (1 second per packet)
     msg_len = max(1, math.ceil(payload_size / 100))
@@ -55,7 +54,8 @@ def get_max_payload_size(ID, TID, DEST, payload):
 
         # Send the packet to the server and check if it returns an error
         # If an error is returned, decrease msg_len by 10% and try sending
-        # the packet again until the server validates the packet
+        # the packet again until the server validates it
+        start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
@@ -63,13 +63,16 @@ def get_max_payload_size(ID, TID, DEST, payload):
             msg_len = int(msg_len * 0.90)
             continue
         
+        end = time.time()
+        print(f"\nPACKET SEND DURATION: {end - start}")
+
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
             print("\n---\n")
             print(f">> PACKET SENT: {packet} \t ({msg_len}/{payload_size})")
             break
-
+    
     return msg_len
 
 def main():
@@ -115,7 +118,7 @@ def main():
 
     SN = 1
     idx = msg_len
-    rejected = False
+    first = False
     while idx < payload_size:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_size else payload_size - 1
@@ -132,21 +135,12 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            msg_len = int(msg_len * 0.75)   # Decrease msg_len by 25% if it is not accepted by the server
-            if socket.timeout:
-                break
-            else:
-                rejected = True
-                continue
+            break
 
         if ACK[-32:] == checksum(packet):
-            print(f">> PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
+            print(f"PACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
 
         SN += 1
-        
-        if not rejected:
-            msg_len = math.ceil(msg_len * 1.25)   # Increase msg_len by 25% to check if the server will still accept it
-        
         idx += msg_len
 
     # End timer
