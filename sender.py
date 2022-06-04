@@ -38,10 +38,10 @@ def parse_input(str):
 
 def get_payload_size(ID, TID, DEST, payload):
     first = True
-    payload_size = len(payload)
+    payload_len = len(payload)
 
     # Assume that 5% of the packet can be sent at first try
-    msg_len = max(1, math.ceil(payload_size * 0.05))
+    msg_len = max(1, math.ceil(payload_len * 0.05))
 
     while True:
         print(F"\nMessage length: {msg_len}")
@@ -67,7 +67,7 @@ def get_payload_size(ID, TID, DEST, payload):
         if ACK[-32:] == checksum(packet):
             print(f">> Checksums match! {msg_len} characters can be sent per run!")
             print("\n---\n")
-            print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_size})")
+            print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_len})")
             break
     
     return msg_len
@@ -109,8 +109,8 @@ def main():
 
     # Open the payload file and print the payload size
     payload = open(FILE).read()
-    payload_size = len(payload)
-    print(f"Total payload size: {payload_size}")
+    payload_len = len(payload)
+    print(f"Total payload size: {payload_len}")
 
     # Compute for an acceptable payload size (not necessarily the maximum)
     msg_len = get_payload_size(ID, TID, DST_ADDR, payload)
@@ -118,15 +118,15 @@ def main():
     i = 2           # Packet counter
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
-    while idx < payload_size:
+    while idx < payload_len:
         # Get the (cumulative) length of the payload sent
-        sent = idx + msg_len if idx + msg_len < payload_size else payload_size - 1
+        sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
 
         # Get the part of the payload to be sent
         msg = payload[idx:sent]
         
         # Format the packet to be sent
-        Z = 0 if idx + msg_len < payload_size else 1
+        Z = 0 if idx + msg_len < payload_len else 1
         packet = f"ID{ID}SN{str(SN).zfill(7)}TXN{TID}LAST{Z}{msg}"
         
         # Send the packet to the server and print
@@ -137,7 +137,7 @@ def main():
             break
 
         if ACK[-32:] == checksum(packet):
-            print(f"({i})\tPACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
+            print(f"({i})\tPACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_len})")
 
         i += 1
         SN += 1
