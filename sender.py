@@ -58,6 +58,8 @@ def get_max_payload_size(ID, TID, DEST, payload):
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
+            end = time.time()
+            print(f"Packet send duration: {end - start}")
             msg_len = int(msg_len * 0.90)
             continue
         
