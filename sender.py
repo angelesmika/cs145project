@@ -49,9 +49,10 @@ def get_max_payload_size(ID, TID, DEST, payload):
         packet = f"ID{ID}SN0000000TXN{TID}LAST0{msg}"
         print(f"Message: {packet}")
 
-        # Send the packet to the server and check if it returns an error
-        # If an error is returned, decrease msg_len by 10% and try sending
-        # the packet again until the server validates it
+        # Send the packet to the server and if an error is returned, get the
+        # processing interval and multiply it by the payload size and divide
+        # the product by 100 seconds to get another approximate value for the
+        # payload size accepted and until the packet is accepted by the server
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
@@ -59,7 +60,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
         except socket.error:
             end = time.time()
             print(f"Packet send duration: {end - start}")
-            msg_len = int(msg_len * 0.90)
+            msg_len = math.floor(end - start) * payload_size // 100
             continue
         
         end = time.time()
