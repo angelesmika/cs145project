@@ -40,11 +40,9 @@ def parse_input(str):
 def get_max_payload_size(ID, TID, DEST, payload):
     payload_size = len(payload)
 
-    # Assume that all packets will be sent in 100 seconds (1 second per packet)
-    msg_len = max(1, math.ceil(payload_size / 100))
+    # Assume that 10% of the payload can be sent on the first try
+    msg_len = max(1, math.ceil(payload_size / 10))
 
-    # While the packet is not being sent, remove 10% of the payload
-    # until the maximum acceptable packet size is obtained
     while True:
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
