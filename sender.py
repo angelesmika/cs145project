@@ -11,7 +11,7 @@ import hashlib
 import argparse
 
 # Set timeout
-timeout = 10
+timeout = 8
 
 # Initiate UDP connection and set a timeout
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -50,24 +50,14 @@ def get_payload_size(ID, TID, DEST, payload):
         packet = f"ID{ID}SN0000000TXN{TID}LAST0{msg}"
         print(f"Message: {packet}")
 
-        # Send the packet to the server and if an error is returned, get the
-        # processing interval and multiply it by the payload size and divide
-        # the product by 90 seconds to get another approximate value for the
-        # payload size accepted. If the packet is still not accepted, continue
-        # probing by reducing the packet size by 10% until it is accepted.
+        # Send the packet to the server and if an error is returned,
+        # reduce payload size by 10% until it is accepted
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            end = time.time()
-            if first:
-                first = False
-                msg_len = payload_size // (math.floor(end - start) * payload_size // 90)
-            else:
-                msg_len = math.ceil(msg_len * 0.90)
-
-            print(f"Packet send duration: {end - start}")
+            msg_len = math.ceil(msg_len * 0.90)
             continue
         
         end = time.time()
