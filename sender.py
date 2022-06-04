@@ -62,7 +62,7 @@ def get_max_payload_size(ID, TID, DEST, payload):
             continue
         
         end = time.time()
-        print(f"\nPACKET SEND DURATION: {end - start}")
+        print(f"Packet send duration: {end - start}")
 
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
