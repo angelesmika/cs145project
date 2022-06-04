@@ -10,8 +10,12 @@ import socket
 import hashlib
 import argparse
 
+# Set timeout
+timeout = 10
+
 # Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+UDP_SOCKET.settimeout(timeout)
 
 # Checksum function
 # Given in the project specifications
@@ -36,8 +40,8 @@ def get_payload_size(ID, TID, DEST, payload):
     first = True
     payload_size = len(payload)
 
-    # Assume that 1 packet can be sent per second over 50 seconds
-    msg_len = max(1, math.ceil(payload_size / 50))
+    # Assume that 10% of the packet can be sent at first try
+    msg_len = max(1, math.ceil(payload_size * 0.10))
 
     while True:
         print(F"\nMessage length: {msg_len}")
