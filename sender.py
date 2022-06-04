@@ -63,7 +63,8 @@ def get_max_payload_size(ID, TID, DEST, payload):
             end = time.time()
             if first:
                 first = False
-                msg_len = math.floor(end - start) * payload_size // 100
+                new_msg_len = math.floor(end - start) * payload_size // 100
+                msg_len = math.ceil(msg_len * 0.90) if msg_len - 10 <= new_msg_len <= msg_len + 10 else new_msg_len
             else:
                 msg_len = math.ceil(msg_len * 0.90)
 
