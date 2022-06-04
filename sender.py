@@ -9,7 +9,6 @@ import time
 import socket
 import hashlib
 import argparse
-from tracemalloc import start
 
 # Set timeout
 timeout = 10
