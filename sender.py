@@ -36,12 +36,12 @@ def parse_input(str):
 
     return cmd
 
-def get_max_payload_size(ID, TID, DEST, payload):
+def get_payload_size(ID, TID, DEST, payload):
     first = True
     payload_size = len(payload)
 
-    # Assume that 1 packet can be sent per second over 75 seconds
-    msg_len = max(1, math.ceil(payload_size / 75))
+    # Assume that 1 packet can be sent per second over 50 seconds
+    msg_len = max(1, math.ceil(payload_size / 50))
 
     while True:
         print(F"\nMessage length: {msg_len}")
@@ -117,16 +117,17 @@ def main():
     TID = UDP_SOCKET.recv(64).decode()
     print(f"Transaction ID: {TID}")
 
+    # Open the payload file and print the payload size
     payload = open(FILE).read()
     payload_size = len(payload)
     print(f"Total payload size: {payload_size}")
 
-    msg_len = get_max_payload_size(ID, TID, DST_ADDR, payload)
+    # Compute for an acceptable payload size (not necessarily the maximum)
+    msg_len = get_payload_size(ID, TID, DST_ADDR, payload)
 
     i = 2           # Packet counter
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
-    first = False
     while idx < payload_size:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_size else payload_size - 1
