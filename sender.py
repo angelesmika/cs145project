@@ -148,6 +148,7 @@ def main():
         if ACK[-32:] == checksum(packet):
             print(f"({i})\tPACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_size})")
 
+        i += 1
         SN += 1
         idx += msg_len
 
