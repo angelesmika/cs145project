@@ -10,12 +10,8 @@ import socket
 import hashlib
 import argparse
 
-# Set timeout
-timeout = 8
-
-# Initiate UDP connection and set a timeout
+# Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-UDP_SOCKET.settimeout(timeout)
 
 # Checksum function
 # Given in the project specifications
