@@ -117,6 +117,7 @@ def main():
     i = 2           # Packet counter
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
+    
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
