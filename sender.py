@@ -133,7 +133,7 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            print(socket.error)
+            print(">> Unexpected error occurred! Terminating...")
             break
 
         if ACK[-32:] == checksum(packet):
