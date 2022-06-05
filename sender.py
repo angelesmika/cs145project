@@ -11,7 +11,7 @@ import hashlib
 import argparse
 
 # Set timeout
-timeout = 30
+timeout = 15
 
 # Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
