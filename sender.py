@@ -46,8 +46,15 @@ def get_payload_size(ID, TID, DEST, payload):
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
+        msg_checksum = checksum(msg)
+
         packet = f"ID{ID}SN0000000TXN{TID}LAST0{msg}"
         print(f"Message: {packet}")
+
+        packet_checksum = checksum(packet)
+
+        print(msg_checksum)
+        print(packet_checksum)
 
         # Send the packet to the server and if an error is returned,
         # reduce payload size by 15% until it is accepted
