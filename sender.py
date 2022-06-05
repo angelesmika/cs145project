@@ -134,7 +134,6 @@ def main():
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
             print(socket.error)
-
             break
 
         if ACK[-32:] == checksum(packet):
