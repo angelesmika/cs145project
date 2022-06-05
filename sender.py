@@ -53,8 +53,8 @@ def get_payload_size(ID, TID, DEST, payload):
 
         packet_checksum = checksum(packet)
 
-        print(msg_checksum)
-        print(packet_checksum)
+        print(f"Message checksum: {msg_checksum}")
+        print(f"Packet checksum: {packet_checksum}")
 
         # Send the packet to the server and if an error is returned,
         # reduce payload size by 15% until it is accepted
