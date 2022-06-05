@@ -39,8 +39,8 @@ def parse_input():
 def get_payload_size(ID, TID, DEST, payload):
     payload_len = len(payload)
 
-    # Assume that 10% of the packet can be sent at first try
-    msg_len = max(1, math.ceil(payload_len * 0.10))
+    # Assume that 5% of the payload can be sent at first try
+    msg_len = max(1, math.ceil(payload_len * 0.05))
 
     while True:
         print(F"\nMessage length: {msg_len}")
@@ -117,7 +117,7 @@ def main():
     i = 2           # Packet counter
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
-    
+
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
