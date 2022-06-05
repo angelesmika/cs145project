@@ -11,7 +11,7 @@ import hashlib
 import argparse
 
 # Set timeout
-timeout = 10
+timeout = 30
 
 # Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -46,15 +46,8 @@ def get_payload_size(ID, TID, DEST, payload):
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
-        msg_checksum = checksum(msg)
-
         packet = f"ID{ID}SN0000000TXN{TID}LAST0{msg}"
         print(f"Message: {packet}")
-
-        packet_checksum = checksum(packet)
-
-        print(f"Message checksum: {msg_checksum}")
-        print(f"Packet checksum: {packet_checksum}")
 
         # Send the packet to the server and if an error is returned,
         # reduce payload size by 15% until it is accepted
@@ -140,6 +133,8 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
+            print(socket.error)
+
             break
 
         if ACK[-32:] == checksum(packet):
