@@ -39,8 +39,8 @@ def parse_input():
 def get_payload_size(ID, TID, DEST, payload):
     payload_len = len(payload)
 
-    # Assume that 5% of the payload can be sent at first try
-    msg_len = max(1, math.ceil(payload_len * 0.05))
+    # Assume that 10% of the payload can be sent at first try
+    msg_len = max(1, math.ceil(payload_len * 0.10))
 
     while True:
         print(F"\nMessage length: {msg_len}")
