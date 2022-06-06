@@ -46,7 +46,7 @@ def get_payload_size(ID, TID, DEST, payload):
     UDP_SOCKET.settimeout(timeout)
 
     # Dictionary for storing packet information
-    checksums = {}
+    packet_info = {}
     
     print("\nNOW PROBING TO GET AN ACCEPTABLE PACKET LENGTH...")
     while True:
@@ -64,7 +64,7 @@ def get_payload_size(ID, TID, DEST, payload):
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
-            checksums[checksum(packet)] = (msg_len, start, packet)  # Store packet information into the dictionary
+            packet_info[checksum(packet)] = (msg_len, start, packet)  # Store packet information into the dictionary
             ACK = UDP_SOCKET.recv(64).decode()
             end = time.time()
             print(f"ACK RECEIVED:\t\t{ACK}")
@@ -73,7 +73,7 @@ def get_payload_size(ID, TID, DEST, payload):
             msg_len = int(msg_len * 0.85)
 
     # Printing the acceptable length, accepted packet, and processing interval
-    correct_packet = checksums[ACK[-32:]]    
+    correct_packet = packet_info[ACK[-32:]]    
     processing_interval = end - correct_packet[1]
     print("\n>> FIRST PACKET ACKNOWLEDGED!")
     print(f"Packet send duration: {processing_interval}")
@@ -132,7 +132,7 @@ def main():
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
 
-    UDP_SOCKET.settimeout(processing_interval + 2)  # Account for delay
+    UDP_SOCKET.settimeout(processing_interval + 5)  # Account for delay
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
