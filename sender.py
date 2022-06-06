@@ -154,7 +154,7 @@ def main():
         
         # Print the packet that was acknowledged by the server
         if ACK[-32:] == checksum(packet):
-            print(f"({i})\tPACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_len})")
+            print(f"({i})\tPACKET SENT: {packet}\t({sent if Z == 0 else sent + 1}/{payload_len})")
 
         i += 1
         SN += 1
