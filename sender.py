@@ -55,6 +55,9 @@ def get_payload_size(ID, TID, DEST, payload):
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
+            if msg_len == 0:
+                UDP_SOCKET.settimeout(60)
+                
             print(f"CHECKSUM OF SENT:\t{checksum(packet)}")
             ACK = UDP_SOCKET.recv(64).decode()
             print(f"ACK RECEIVED:\t\t{ACK}")
