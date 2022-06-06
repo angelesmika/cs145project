@@ -60,12 +60,12 @@ def get_payload_size(ID, TID, DEST, payload):
 
             print(f"CHECKSUM OF SENT:\t{checksum(packet)}")
             ACK = UDP_SOCKET.recv(64).decode()
+            end = time.time()
             print(f"ACK RECEIVED:\t\t{ACK}")
             break
-        except socket.error:
+        except socket.timeout:
             msg_len = int(msg_len * 0.85)
         
-    end = time.time()
     processing_interval = end - start
     print(f"Packet send duration: {processing_interval}")
 
@@ -139,7 +139,7 @@ def main():
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            print(">> Unexpected error occurred! Terminating...")
+            print(f">> Unexpected error ({socket.error}) occurred! Terminating...")
             break
 
         if ACK[-32:] == checksum(packet):
