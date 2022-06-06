@@ -48,7 +48,7 @@ def get_payload_size(ID, TID, DEST, payload):
     # Dictionary for storing packet information
     checksums = {}
     
-    print("NOW PROBING TO GET AN ACCEPTABLE PACKET LENGTH...\n")
+    print("\nNOW PROBING TO GET AN ACCEPTABLE PACKET LENGTH...")
     while True:
         if msg_len == 0:
             UDP_SOCKET.settimeout(60)
