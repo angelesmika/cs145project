@@ -61,7 +61,8 @@ def get_payload_size(ID, TID, DEST, payload):
             msg_len = int(msg_len * 0.85)
         
     end = time.time()
-    print(f"Packet send duration: {end - start}")
+    processing_interval = end - start
+    print(f"Packet send duration: {processing_interval}")
 
     # Check if the packet is valid
     if ACK[-32:] == checksum(packet):
@@ -69,7 +70,7 @@ def get_payload_size(ID, TID, DEST, payload):
         print("\n---\n")
         print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_len})")
     
-    return msg_len
+    return msg_len, processing_interval
 
 def main():
     cmd = parse_input()   # Parse user input in the terminal
@@ -112,12 +113,13 @@ def main():
     print(f"Total payload size: {payload_len}")
 
     # Compute for an acceptable payload size (not necessarily the maximum)
-    msg_len = get_payload_size(ID, TID, DST_ADDR, payload)
+    msg_len, processing_interval = get_payload_size(ID, TID, DST_ADDR, payload)
 
     i = 2           # Packet counter
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
 
+    UDP_SOCKET.settimeout(processing_interval + 2)  # Account for delay
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
