@@ -70,6 +70,7 @@ def get_payload_size(ID, TID, DEST, payload):
 
     correct_packet = checksums[ACK[-32:]]    
     processing_interval = end - correct_packet[1]
+    print("\n>> FIRST PACKET ACKNOWLEDGED!\n")
     print(f"Packet send duration: {processing_interval}")
     to_return = correct_packet[0]
     print(f">> {to_return} characters can be sent per run!")
