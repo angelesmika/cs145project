@@ -60,7 +60,7 @@ def get_payload_size(ID, TID, DEST, payload):
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
-            checksums[checksum(packet)] = (msg_len, start)
+            checksums[checksum(packet)] = (msg_len, start, packet)
             ACK = UDP_SOCKET.recv(64).decode()
             end = time.time()
             print(f"ACK RECEIVED:\t\t{ACK}")
@@ -74,7 +74,7 @@ def get_payload_size(ID, TID, DEST, payload):
     to_return = correct_packet[0]
     print(f">> {to_return} characters can be sent per run!")
     print("\n---\n")
-    print(f"(1)\tPACKET SENT: slay! \t ({to_return}/{payload_len})")
+    print(f"(1)\tPACKET SENT: {correct_packet[2]} \t ({to_return}/{payload_len})")
     
     return to_return, processing_interval
 
