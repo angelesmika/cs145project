@@ -46,10 +46,6 @@ def get_payload_size(ID, TID, DEST, payload):
     
     print("\nNOW PROBING TO GET AN ACCEPTABLE PACKET LENGTH...")
     while True:
-        if msg_len == 0:
-            print("hello")
-            UDP_SOCKET.settimeout(60)
-
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
@@ -61,6 +57,9 @@ def get_payload_size(ID, TID, DEST, payload):
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
+            if msg_len == 0:
+                print("hello")
+                UDP_SOCKET.settimeout(60)
             packet_info[checksum(packet)] = (msg_len, start, packet)  # Store packet information into the dictionary
             ACK = UDP_SOCKET.recv(64).decode()
             end = time.time()
