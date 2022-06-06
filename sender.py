@@ -69,7 +69,7 @@ def get_payload_size(ID, TID, DEST, payload):
     processing_interval = end - start
     print(f"Packet send duration: {processing_interval}")
 
-    print(f">> Checksums match! {msg_len} characters can be sent per run!")
+    print(f">> {msg_len} characters can be sent per run!")
     print("\n---\n")
     print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_len})")
     
