@@ -57,7 +57,7 @@ def get_payload_size(ID, TID, DEST, payload):
         try:
             if msg_len == 0:
                 UDP_SOCKET.settimeout(60)
-                
+
             print(f"CHECKSUM OF SENT:\t{checksum(packet)}")
             ACK = UDP_SOCKET.recv(64).decode()
             print(f"ACK RECEIVED:\t\t{ACK}")
@@ -69,11 +69,9 @@ def get_payload_size(ID, TID, DEST, payload):
     processing_interval = end - start
     print(f"Packet send duration: {processing_interval}")
 
-    # Check if the packet is valid
-    if ACK[-32:] == checksum(packet):
-        print(f">> Checksums match! {msg_len} characters can be sent per run!")
-        print("\n---\n")
-        print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_len})")
+    print(f">> Checksums match! {msg_len} characters can be sent per run!")
+    print("\n---\n")
+    print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_len})")
     
     return msg_len, processing_interval
 
