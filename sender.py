@@ -35,6 +35,8 @@ def parse_input():
 
     return cmd
 
+# Compute for an acceptable payload size and
+# get the processing interval
 def get_payload_size(ID, TID, DEST, payload):
     payload_len = len(payload)
 
@@ -80,6 +82,7 @@ def get_payload_size(ID, TID, DEST, payload):
     
     return acknowledged_len, processing_interval
 
+# Main function
 def main():
     cmd = parse_input()   # Parse user input in the terminal
 
