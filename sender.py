@@ -61,6 +61,7 @@ def get_payload_size(ID, TID, DEST, payload):
         
         end = time.time()
         print(f"Packet send duration: {end - start}")
+        print(f"Packet received: {ACK}")
 
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
