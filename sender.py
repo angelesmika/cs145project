@@ -35,8 +35,8 @@ def parse_input():
 
     return cmd
 
-# Compute for an acceptable payload size and
-# get the processing interval
+# Compute for an acceptable payload size
+# and get the processing interval
 def get_payload_size(ID, TID, DEST, payload):
     payload_len = len(payload)
 
@@ -45,6 +45,7 @@ def get_payload_size(ID, TID, DEST, payload):
     msg_len = max(1, math.ceil(payload_len * 0.10))
     UDP_SOCKET.settimeout(timeout)
 
+    # Dictionary for storing packet information
     checksums = {}
     
     print("NOW PROBING TO GET AN ACCEPTABLE PACKET LENGTH...\n")
@@ -63,7 +64,7 @@ def get_payload_size(ID, TID, DEST, payload):
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
-            checksums[checksum(packet)] = (msg_len, start, packet)
+            checksums[checksum(packet)] = (msg_len, start, packet)  # Store packet information into the dictionary
             ACK = UDP_SOCKET.recv(64).decode()
             end = time.time()
             print(f"ACK RECEIVED:\t\t{ACK}")
@@ -71,6 +72,7 @@ def get_payload_size(ID, TID, DEST, payload):
         except socket.timeout:
             msg_len = int(msg_len * 0.85)
 
+    # Printing the acceptable length, accepted packet, and processing interval
     correct_packet = checksums[ACK[-32:]]    
     processing_interval = end - correct_packet[1]
     print("\n>> FIRST PACKET ACKNOWLEDGED!")
