@@ -73,7 +73,7 @@ def get_payload_size(ID, TID, DEST, payload):
     to_return = checksums[ACK[-32:]]
     print(f">> {to_return} characters can be sent per run!")
     print("\n---\n")
-    print(f"(1)\tPACKET SENT: {packet} \t ({to_return}/{payload_len})")
+    print(f"(1)\tPACKET SENT: slay! \t ({to_return}/{payload_len})")
     
     return to_return
 
@@ -124,7 +124,7 @@ def main():
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
 
-    UDP_SOCKET.settimeout(processing_interval + 2)  # Account for delay
+    UDP_SOCKET.settimeout(15)  # Account for delay
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
