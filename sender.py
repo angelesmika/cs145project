@@ -76,7 +76,7 @@ def get_payload_size(ID, TID, DEST, payload):
     acknowledged_len = correct_packet[0]
     print(f"Payload size acknowledged: {acknowledged_len}")
     print("\n---\n")
-    print(f"(1)\tPACKET SENT: {correct_packet[2]} \t ({acknowledged_len}/{payload_len})")
+    print(f"(1)\tPACKET SENT: {correct_packet[2]}\t({acknowledged_len}/{payload_len})")
     
     return acknowledged_len, processing_interval
 
