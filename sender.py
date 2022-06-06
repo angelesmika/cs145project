@@ -59,7 +59,6 @@ def get_payload_size(ID, TID, DEST, payload):
             break
         except socket.error:
             msg_len = int(msg_len * 0.85)
-            continue
         
     end = time.time()
     print(f"Packet send duration: {end - start}")
