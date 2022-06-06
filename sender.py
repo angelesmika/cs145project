@@ -63,7 +63,6 @@ def get_payload_size(ID, TID, DEST, payload):
             packet_info[checksum(packet)] = (msg_len, start, packet)  # Store packet information into the dictionary
             ACK = UDP_SOCKET.recv(64).decode()
             end = time.time()
-            print(f"ACK RECEIVED:\t\t{ACK}")
             break
         except socket.timeout:
             msg_len = int(msg_len * 0.85)
