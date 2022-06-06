@@ -47,7 +47,7 @@ def get_payload_size(ID, TID, DEST, payload):
     print("\nNOW PROBING TO GET AN ACCEPTABLE PACKET LENGTH...")
     while True:
         if msg_len <= 1:
-            print("\n>> Now waiting for an ACK...\n")
+            print("\n>> Now waiting for an ACK...")
             UDP_SOCKET.settimeout(30)
 
         print(F"\nMessage length: {msg_len}")
