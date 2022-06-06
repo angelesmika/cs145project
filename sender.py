@@ -3,15 +3,11 @@
 # CS 145 Project
 
 # Import libraries
-import sys
 import math
 import time
 import socket
 import hashlib
 import argparse
-
-# Set timeout
-timeout = 0.5
 
 # Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -43,7 +39,7 @@ def get_payload_size(ID, TID, DEST, payload):
     # Assume that 10% of the payload can be sent at first try
     # and set the socket timeout to 0.5 seconds
     msg_len = max(1, math.ceil(payload_len * 0.10))
-    UDP_SOCKET.settimeout(timeout)
+    UDP_SOCKET.settimeout(0.5)
 
     # Dictionary for storing packet information
     packet_info = {}
@@ -133,7 +129,10 @@ def main():
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
 
-    UDP_SOCKET.settimeout(processing_interval + 5)  # Account for delay
+    # Set the timeout to the computed processing interval
+    # and add 5 seconds to account for delays
+    UDP_SOCKET.settimeout(processing_interval + 5)
+
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
@@ -152,7 +151,8 @@ def main():
         except socket.error:
             print(f">> Unexpected error ({socket.error}) occurred! Terminating...")
             break
-
+        
+        # Print the packet that was acknowledged by the server
         if ACK[-32:] == checksum(packet):
             print(f"({i})\tPACKET SENT: {packet} \t ({sent if Z == 0 else sent + 1}/{payload_len})")
 
