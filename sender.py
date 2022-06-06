@@ -45,6 +45,7 @@ def get_payload_size(ID, TID, DEST, payload):
 
     checksums = {}
     
+    print("NOW PROBING TO GET AN ACCEPTABLE PACKET LENGTH...\n")
     while True:
         if msg_len == 0:
             UDP_SOCKET.settimeout(60)
@@ -70,14 +71,14 @@ def get_payload_size(ID, TID, DEST, payload):
 
     correct_packet = checksums[ACK[-32:]]    
     processing_interval = end - correct_packet[1]
-    print("\n>> FIRST PACKET ACKNOWLEDGED!\n")
+    print("\n>> FIRST PACKET ACKNOWLEDGED!")
     print(f"Packet send duration: {processing_interval}")
-    to_return = correct_packet[0]
-    print(f">> {to_return} characters can be sent per run!")
+    acknowledged_len = correct_packet[0]
+    print(f"Payload size acknowledged: {acknowledged_len}")
     print("\n---\n")
-    print(f"(1)\tPACKET SENT: {correct_packet[2]} \t ({to_return}/{payload_len})")
+    print(f"(1)\tPACKET SENT: {correct_packet[2]} \t ({acknowledged_len}/{payload_len})")
     
-    return to_return, processing_interval
+    return acknowledged_len, processing_interval
 
 def main():
     cmd = parse_input()   # Parse user input in the terminal
