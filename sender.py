@@ -43,7 +43,12 @@ def get_payload_size(ID, TID, DEST, payload):
     msg_len = max(1, math.ceil(payload_len * 0.10))
     UDP_SOCKET.settimeout(timeout)
 
+    checksums = {}
+    
     while True:
+        if msg_len == 0:
+            UDP_SOCKET.settimeout(60)
+
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
@@ -55,12 +60,10 @@ def get_payload_size(ID, TID, DEST, payload):
         start = time.time()
         UDP_SOCKET.sendto(packet.encode(), DEST)
         try:
-            if msg_len == 0:
-                UDP_SOCKET.settimeout(60)
-
-            print(f"CHECKSUM OF SENT:\t{checksum(packet)}")
+            checksums[checksum(packet)] = msg_len
             ACK = UDP_SOCKET.recv(64).decode()
             end = time.time()
+            to_return = checksums[ACK[-32:]]
             print(f"ACK RECEIVED:\t\t{ACK}")
             break
         except socket.timeout:
@@ -73,7 +76,7 @@ def get_payload_size(ID, TID, DEST, payload):
     print("\n---\n")
     print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_len})")
     
-    return msg_len, processing_interval
+    return to_return, processing_interval
 
 def main():
     cmd = parse_input()   # Parse user input in the terminal
