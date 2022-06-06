@@ -63,7 +63,6 @@ def get_payload_size(ID, TID, DEST, payload):
             checksums[checksum(packet)] = msg_len
             ACK = UDP_SOCKET.recv(64).decode()
             end = time.time()
-            to_return = checksums[ACK[-32:]]
             print(f"ACK RECEIVED:\t\t{ACK}")
             break
         except socket.timeout:
@@ -71,12 +70,12 @@ def get_payload_size(ID, TID, DEST, payload):
         
     processing_interval = end - start
     print(f"Packet send duration: {processing_interval}")
-
-    print(f">> {msg_len} characters can be sent per run!")
+    to_return = checksums[ACK[-32:]]
+    print(f">> {to_return} characters can be sent per run!")
     print("\n---\n")
-    print(f"(1)\tPACKET SENT: {packet} \t ({msg_len}/{payload_len})")
+    print(f"(1)\tPACKET SENT: {packet} \t ({to_return}/{payload_len})")
     
-    return to_return, processing_interval
+    return to_return
 
 def main():
     cmd = parse_input()   # Parse user input in the terminal
@@ -119,7 +118,7 @@ def main():
     print(f"Total payload size: {payload_len}")
 
     # Compute for an acceptable payload size (not necessarily the maximum)
-    msg_len, processing_interval = get_payload_size(ID, TID, DST_ADDR, payload)
+    msg_len = get_payload_size(ID, TID, DST_ADDR, payload)
 
     i = 2           # Packet counter
     SN = 1          # Sequence number
