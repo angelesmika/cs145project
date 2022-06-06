@@ -37,7 +37,6 @@ def parse_input():
     return cmd
 
 def get_payload_size(ID, TID, DEST, payload):
-    UDP_SOCKET.settimeout(3)
     payload_len = len(payload)
 
     # Assume that 10% of the payload can be sent at first try
@@ -57,7 +56,6 @@ def get_payload_size(ID, TID, DEST, payload):
         try:
             ACK = UDP_SOCKET.recv(64).decode()
         except socket.error:
-            print(f">> {UDP_SOCKET.gettimeout()}")
             msg_len = int(msg_len * 0.85)
             continue
         
