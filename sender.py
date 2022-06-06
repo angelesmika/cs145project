@@ -37,7 +37,7 @@ def parse_input():
     return cmd
 
 def get_payload_size(ID, TID, DEST, payload):
-    # UDP_SOCKET.settimeout(3)
+    UDP_SOCKET.settimeout(3)
     payload_len = len(payload)
 
     # Assume that 10% of the payload can be sent at first try
@@ -63,9 +63,6 @@ def get_payload_size(ID, TID, DEST, payload):
         
         end = time.time()
         print(f"Packet send duration: {end - start}")
-        print(f"Packet received: {ACK}")
-        print(f"ACK CHECKSUM:\t\t{checksum(ACK)}")
-        print(f"PACKET CHECKSUM:\t{checksum(packet)}")
 
         # Check if the packet is valid
         if ACK[-32:] == checksum(packet):
