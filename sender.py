@@ -36,6 +36,7 @@ def parse_input():
     return cmd
 
 def get_payload_size(ID, TID, DEST, payload):
+    UDP_SOCKET.settimeout(3)
     payload_len = len(payload)
 
     # Assume that 10% of the payload can be sent at first try
