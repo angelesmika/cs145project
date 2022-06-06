@@ -130,8 +130,8 @@ def main():
     idx = msg_len   # Index to be accessed in the payload
 
     # Set the timeout to the computed processing interval
-    # and add 5 seconds to account for delays
-    UDP_SOCKET.settimeout(processing_interval + 5)
+    # and add 3 seconds to account for delays
+    UDP_SOCKET.settimeout(processing_interval + 3)
 
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
