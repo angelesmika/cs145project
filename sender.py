@@ -15,7 +15,6 @@ timeout = 15
 
 # Initiate UDP connection
 UDP_SOCKET = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-UDP_SOCKET.settimeout(timeout)
 
 # Checksum function
 # Given in the project specifications
@@ -118,6 +117,7 @@ def main():
     SN = 1          # Sequence number
     idx = msg_len   # Index to be accessed in the payload
 
+    UDP_SOCKET.settimeout(timeout)      # Set timeout to the socket
     while idx < payload_len:
         # Get the (cumulative) length of the payload sent
         sent = idx + msg_len if idx + msg_len < payload_len else payload_len - 1
