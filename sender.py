@@ -126,6 +126,7 @@ def main():
     print(f"Total payload size: {payload_len}")
 
     # Compute for an acceptable payload size (not necessarily the maximum)
+    # and get the processing interval
     msg_len, processing_interval = get_payload_size(ID, TID, DST_ADDR, payload)
 
     i = 2           # Packet counter
