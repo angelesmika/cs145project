@@ -53,7 +53,8 @@ def get_payload_size(ID, TID, DEST, payload):
         print(F"\nMessage length: {msg_len}")
         msg = payload[0:msg_len]
 
-        packet = f"ID{ID}SN0000000TXN{TID}LAST0{msg}"
+        Z = 0 if msg_len < payload_len else 1
+        packet = f"ID{ID}SN0000000TXN{TID}LAST{Z}{msg}"
         print(f"Message: {packet}")
 
         # Send the packet to the server and if an error is returned,
