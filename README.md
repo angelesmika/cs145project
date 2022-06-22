@@ -1,8 +1,4 @@
-Angeles, Ma. Mikaela A.
-2018-00527
-CS 145 LAB 1
-
-CS 145 Project: README
+### CS 145 Project: README
 
 This program is written in Python 3.
 In order to run it properly, please input the following in an Ubuntu terminal:
